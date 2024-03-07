@@ -19,6 +19,8 @@ function LoginForm() {
   
 async function handleSubmit(e) {
     e.preventDefault()
+    
+    try{
     const response = await fetch(`http://localhost:5000/authentication/`, {
         method: 'POST',
         headers: {
@@ -30,10 +32,16 @@ async function handleSubmit(e) {
     const data = await response.json()
 
     if (response.status === 200) {
-        setCurrentUser(data.user)
+        setCurrentUser(data.user);
+        localStorage.setItem('token', data.token)
+        console.log(data.token)
         history.push(`/`)
     } else {
         setErrorMessage(data.message)
+    }
+} catch (error) {
+    console.error("An error occurred:", error);
+    setErrorMessage("An error occurred, please try again");
     }
 }
   
